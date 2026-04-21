@@ -50,11 +50,51 @@
 // }
 
 
+
+
+//  $name = "Adil";
+
+//  echo $name == "Ail";
+
+
+
+$email = "adil@gmail.com";
+$password = "1234";
+
+$condition = $email == "adil@gmail.com" && $password == "1234";
+
+// echo $condition;
+
+// if($condition){
+//     echo "User Login";
+// }else{
+//     echo "Invalid Email or Password";
+// }
+
+
+switch($condition){
+    case true:
+      echo "User Login";
+      break;
+    case false:
+      echo "Invalid Email Or Password";
+      break;
+    default :
+      echo  "Invalid Data";  
+}
+
+
+
+
+
+
+
+
 ?>
 
 
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -74,4 +114,4 @@
    <h1><?php   echo "Hello, World!" ?></h1>
     
 </body>
-</html>
+</html> -->
