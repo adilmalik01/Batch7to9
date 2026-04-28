@@ -1,15 +1,37 @@
 <?php
 
 
+include "db.php";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST["name"];
     $email = $_POST["email"];
     $password = $_POST["password"];
 
 
-    echo "Name: " . $name . "<br>";
-    echo "Email: " . $email . "<br>";
-    echo "Password: " . $password . "<br>";
+
+    $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+
+
+    $check_user = "SELECT `id`, `name`, `email`, `password` FROM `users` WHERE `email` = '$email'";
+
+    $check_user_result = mysqli_query($connection, $check_user);
+
+
+    if (mysqli_num_rows($check_user_result) > 0) {
+        echo "User already exists!";
+    } else {
+        $sql_query = "INSERT INTO `users`(`name`, `email`, `password`) VALUES ('$name','$email','$password_hash')";
+
+        $result = mysqli_query($connection, $sql_query);
+
+        if ($result) {
+            echo "Signup successful!";
+        } else {
+            echo "Error: " . mysqli_error($connection);
+        }
+    }
 }
 
 
