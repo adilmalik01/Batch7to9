@@ -1,3 +1,63 @@
+<?php
+
+
+
+include "./db.php";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+
+
+
+    $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+
+
+    $check_user = "SELECT `id`, `name`, `email`, `password`,`isAdmin` FROM `users` WHERE `email` = '$email'";
+
+    $check_user_result = mysqli_query($connection, $check_user);
+
+    if (mysqli_num_rows($check_user_result) == 0) {
+        echo "Email Not Found";
+    } else {
+
+        $user = mysqli_fetch_assoc($check_user_result);
+
+        if (password_verify($password, $user["password"])) {
+
+            $_SESSION["is_Login"] = true;
+
+            if ($user["isAdmin"] == "user") {
+                echo "Welcome User";
+                header("Location: ./user");
+            } else if ($user["isAdmin"] == "admin") {
+                echo "Welcome Admin";
+                header("Location: ./admin");
+            } else {
+                echo "Server Error";
+            }
+
+
+            echo "User Login";
+        } else {
+            echo "Invalid Email Or Password";
+        };
+    }
+}
+
+
+
+
+
+
+?>
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -44,7 +104,7 @@
     <div class="form-box">
         <h2>Login</h2>
 
-        <form method="POST">
+        <form method="POST" action="./login.php">
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
 
