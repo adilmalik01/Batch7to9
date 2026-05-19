@@ -1,3 +1,21 @@
+<?php
+session_start();
+
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    session_unset();
+    session_destroy();
+
+
+
+    header("Location: ./login");
+
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -54,7 +72,6 @@
             color: black;
             font-weight: bold;
         }
-
     </style>
 </head>
 
@@ -65,8 +82,16 @@
 
         <div class="nav-links">
             <a href="./index.php">Home</a>
-            <a href="./login.php">Login</a>
-            <a href="./signup.php" class="signup-btn">Signup</a>
+            <?php if (!isset($_SESSION["isLogin"])):  ?>
+
+                <a href="./login.php">Login</a>
+                <a href="./signup.php" class="signup-btn">Signup</a>
+            <?php endif ?>
+            <form action="./logout.php" method="post">
+                <button type="submit">Logout</button>
+            </form>
+            <a href="./profile.php" class="signup-btn">Profile</a>
+
         </div>
     </div>
 

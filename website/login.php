@@ -1,5 +1,13 @@
 <?php
 
+session_start();
+
+if (isset($_SESSION["isLogin"]) && isset($_SESSION["isAdmin"])) {
+    header("Location: ./admin");
+} else if (isset($_SESSION["isLogin"]) && isset($_SESSION["isAdmin"]) == false) {
+    header("Location: ./user");
+}
+
 
 
 include "./db.php";
@@ -29,9 +37,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["is_Login"] = true;
 
             if ($user["isAdmin"] == "user") {
+
+
+                $_SESSION["isLogin"] = true;
+                $_SESSION["isAdmin"] = false;
+                $_SESSION["email"] = $user["email"];
+
                 echo "Welcome User";
                 header("Location: ./user");
             } else if ($user["isAdmin"] == "admin") {
+
+                $_SESSION["isLogin"] = true;
+                $_SESSION["email"] = $user["email"];
+                $_SESSION["isAdmin"] = true;
+
                 echo "Welcome Admin";
                 header("Location: ./admin");
             } else {
