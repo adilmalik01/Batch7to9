@@ -1,19 +1,22 @@
 <?php
-session_start();
 
 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    session_unset();
-    session_destroy();
-
-
-
-    header("Location: ./login");
-
-    exit();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
+
+if (isset($_SESSION["isLogin"]) && isset($_SESSION["isAdmin"])) {
+    header("Location: ./admin");
+} else if (isset($_SESSION["isLogin"]) && isset($_SESSION["isAdmin"]) == false) {
+    header("Location: ./user");
+}
+
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -82,16 +85,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="nav-links">
             <a href="./index.php">Home</a>
-            <?php if (!isset($_SESSION["isLogin"])):  ?>
+
+            <?php if (!isset($_SESSION["isLogin"]) || $_SESSION["isLogin"] !== true): ?>
 
                 <a href="./login.php">Login</a>
                 <a href="./signup.php" class="signup-btn">Signup</a>
-            <?php endif ?>
-            <form action="./logout.php" method="post">
-                <button type="submit">Logout</button>
-            </form>
-            <a href="./profile.php" class="signup-btn">Profile</a>
 
+            <?php else: ?>
+
+                <a href="./profile.php" class="signup-btn">Profile</a>
+
+                <form action="./logout.php" method="post" style="display:inline;">
+                    <button type="submit">Logout</button>
+                </form>
+
+            <?php endif; ?>
         </div>
     </div>
 

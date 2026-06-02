@@ -1,12 +1,11 @@
 <?php
 
-session_start();
 
-if (isset($_SESSION["isLogin"]) && isset($_SESSION["isAdmin"])) {
-    header("Location: ./admin");
-} else if (isset($_SESSION["isLogin"]) && isset($_SESSION["isAdmin"]) == false) {
-    header("Location: ./user");
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
+
 
 
 
@@ -31,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
 
         $user = mysqli_fetch_assoc($check_user_result);
+        var_dump($user);
 
         if (password_verify($password, $user["password"])) {
 
@@ -43,22 +43,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["isAdmin"] = false;
                 $_SESSION["email"] = $user["email"];
 
-                echo "Welcome User";
                 header("Location: ./user");
+                exit();
             } else if ($user["isAdmin"] == "admin") {
 
                 $_SESSION["isLogin"] = true;
                 $_SESSION["email"] = $user["email"];
                 $_SESSION["isAdmin"] = true;
 
-                echo "Welcome Admin";
                 header("Location: ./admin");
+                exit();
             } else {
                 echo "Server Error";
             }
-
-
-            echo "User Login";
         } else {
             echo "Invalid Email Or Password";
         };
