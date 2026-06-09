@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["isAdmin"] = false;
                 $_SESSION["email"] = $user["email"];
 
-                header("Location: ./user");
+                header("Location: ./");
                 exit();
             } else if ($user["isAdmin"] == "admin") {
 
