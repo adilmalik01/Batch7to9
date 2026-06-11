@@ -2,18 +2,7 @@
 
 
 
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-if (isset($_SESSION["isLogin"]) && isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"] === true ) {
-    header("Location:./admin/index.php");
-} else if (isset($_SESSION["isLogin"]) && isset($_SESSION["isAdmin"]) == false) {
-    header("Location: ./");
-}
-
-
+session_start();
 
 
 

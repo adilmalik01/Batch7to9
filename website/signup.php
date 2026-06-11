@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     if (mysqli_num_rows($check_user_result) > 0) {
-        echo "User already exists!";
+        echo "User already exiswts!";
     } else {
         $sql_query = "INSERT INTO `users`(`name`, `email`, `password`) VALUES ('$name','$email','$password_hash')";
 

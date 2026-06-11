@@ -9,56 +9,35 @@ if (session_status() === PHP_SESSION_NONE) {
 
 
 
+include "./auth.php";
 include "./db.php";
 
+redirect_if_logged_in();
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST["email"];
-    $password = $_POST["password"];
+    $email = trim($_POST["email"] ?? "");
+    $password = $_POST["password"] ?? "";
 
-
-
-    $password_hash = password_hash($password, PASSWORD_DEFAULT);
-
-
-
-    $check_user = "SELECT `id`, `name`, `email`, `password`,`isAdmin` FROM `users` WHERE `email` = '$email'";
-
+    $safe_email = mysqli_real_escape_string($connection, $email);
+    $check_user = "SELECT `id`, `name`, `email`, `password`, `isAdmin` FROM `users` WHERE `email` = '$safe_email'";
     $check_user_result = mysqli_query($connection, $check_user);
 
     if (mysqli_num_rows($check_user_result) == 0) {
         echo "Email Not Found";
     } else {
-
         $user = mysqli_fetch_assoc($check_user_result);
-        var_dump($user);
 
         if (password_verify($password, $user["password"])) {
+            login_user($user);
 
-            $_SESSION["is_Login"] = true;
-
-            if ($user["isAdmin"] == "user") {
-
-
-                $_SESSION["isLogin"] = true;
-                $_SESSION["isAdmin"] = false;
-                $_SESSION["email"] = $user["email"];
-
-                header("Location: ./");
-                exit();
-            } else if ($user["isAdmin"] == "admin") {
-
-                $_SESSION["isLogin"] = true;
-                $_SESSION["email"] = $user["email"];
-                $_SESSION["isAdmin"] = true;
-
-                header("Location: ./admin");
-                exit();
-            } else {
-                echo "Server Error";
+            if (is_admin()) {
+                redirect_to('/admin/index.php');
             }
+
+            redirect_to('/index.php');
         } else {
             echo "Invalid Email Or Password";
-        };
+        }
     }
 }
 
